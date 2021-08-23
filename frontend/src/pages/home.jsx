@@ -1,10 +1,13 @@
 import React from 'react';
+import NavBar from '../components/navBar.jsx'
+import Lists from '../components/lists.jsx'
 
 const Home = () => {
   return (
-    <div>
-      <h1>Home</h1>
-    </div>
+    <>
+      <NavBar />
+      <Lists />
+    </>
   );
 }
 
