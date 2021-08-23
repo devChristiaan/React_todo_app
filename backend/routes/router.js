@@ -5,10 +5,10 @@ const router = express.Router()
 
 //Get all lists -- Add async and await if it defaults to err
 
-router.get('/lists', (req, res) => {
-  const lists = getLists()
+router.get('/lists', async (req, res) => {
+  const lists = await getLists()
   if(lists){
-    res.status(200).send(JOSN.stringify(lists))
+    res.status(200).send(JSON.stringify(lists))
   } else {
     res.status(404).send({notFound:"No Lists Found. Please Create a List"})
   } 

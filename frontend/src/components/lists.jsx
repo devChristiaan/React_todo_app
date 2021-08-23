@@ -18,7 +18,7 @@ const Lists = () => {
   const addListUrl = `http://localhost:3001/addlist`
   const fetchListUrl = `http://localhost:3001/lists`
 
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -58,7 +58,7 @@ const Lists = () => {
       title={title}
       url={addListUrl} />
       <TableContainer component={Paper}>
-      <Typography>Your Todo Lists</Typography>
+      <Typography variant="h5">Your Todo Lists</Typography>
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>

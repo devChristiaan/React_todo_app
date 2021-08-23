@@ -8,8 +8,10 @@ const List = (props) => {
       <TableCell component="th" scope="row">
         {props.title}
       </TableCell>
-      <TableCell align="right"><CreateIcon/></TableCell>
-      <TableCell align="right"><DeleteIcon/></TableCell>
+      <TableCell align="right">
+        <CreateIcon/>
+        <DeleteIcon/>
+      </TableCell>
     </TableRow>
   );
 }
