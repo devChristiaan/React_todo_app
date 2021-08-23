@@ -4,12 +4,14 @@ import AddComp from "./addComp.jsx"
 const Lists = () => {
 
   const title = "Lists"
+  const url = `http://localhost:3001/addlist`
 
   return(
     <Container>
-      <AddComp title={title} />
+      <AddComp 
+      title={title}
+      url={url} />
       <Paper>
-
       </Paper>
     </Container>
   )
