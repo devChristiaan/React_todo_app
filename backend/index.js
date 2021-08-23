@@ -2,6 +2,9 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 
+//Import Routes
+import router from './routes/router.js';
+
 //Instantiate the app
 const app = express();
 dotenv.config();
@@ -10,8 +13,11 @@ dotenv.config();
 app.use(cors());
 app.use(express.json())
 
+//Routes
+app.use('/', router)
+
 const port = process.env.PORT || 9001;
 
-app.listen((req, res) => {
-  console.log(`Server listening on port ${port}`);
+app.listen(port, (req, res) => {
+  console.log(`Server listening on http://localhost:${port}`);
 })
