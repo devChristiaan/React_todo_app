@@ -1,4 +1,4 @@
-import db from '../db'
+import { db } from './dbconnection.js'
 
 const getLists = () => {
   const query = `SELECT * FROM lists`
