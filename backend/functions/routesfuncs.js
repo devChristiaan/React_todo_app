@@ -13,4 +13,4 @@ const getLists = () => {
   })
 }
 
-export default { getLists }
+export { getLists }

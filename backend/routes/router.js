@@ -1,9 +1,9 @@
 import express from 'express'
-import  getLists from '../functions/routesfuncs.js'
+import { getLists } from '../functions/routesfuncs.js'
 
 const router = express.Router()
 
-//Get all lists -- Add async and await if it defaults to error
+//Get all lists -- Add async and await if it defaults to err
 
 router.get('/lists', (req, res) => {
   const lists = getLists()
