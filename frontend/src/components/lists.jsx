@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import axios from 'axios';
 import AddComp from "./addComp.jsx"
 import List from "./List.jsx"
+import ListItem from "./ListItems.jsx";
 
 
 const useStyles = makeStyles({
@@ -21,6 +22,8 @@ const Lists = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [loadList, setLoadList] = useState(false);
+  const [loadListID, setLoadListID] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -38,20 +41,29 @@ const Lists = () => {
 
   const openList = (list) => {
     console.log(list);
+    setLoadList(true);
+    setLoadListID(list.ListID);
   }
 
-  console.log(data);
-
-  const list = data.map(list => {
+  const lists = data.map(list => {
     return (
       <List 
       key={list.ListID}
       title={list.Title}
       onClick={() => openList(list.ListID)}
       />
+    )})
+
+  const listItems = data.map(list => {
+    return (
+      <ListItem 
+      key={list.ListID}
+      title={list.Title}
+      />
     )
   })
 
+  if (!loadList) {
   return(
     <Container>
       <AddComp 
@@ -68,13 +80,36 @@ const Lists = () => {
         </TableHead>
         <TableBody>
           {loading === true ? <TableRow><TableCell>Loading...</TableCell></TableRow> : null}
-          {error === true ? <TableRow><TableCell>Error Occured Please reload</TableCell></TableRow> : null}
-          {list !== null ? list : null}
+          {lists !== null ? lists : null}
         </TableBody>
       </Table>
     </TableContainer>
     </Container>
   )
+  } else {
+    return(
+      <Container>
+        <AddComp 
+        title={title}
+        url={addListUrl} />
+        <TableContainer component={Paper}>
+        <Typography variant="h5">Your Todo Items</Typography>
+        <Table className={classes.table} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>ToDo</TableCell>
+              <TableCell align="right">Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {loading === true ? <TableRow><TableCell>Loading...</TableCell></TableRow> : null}
+            {listItems !== null ? listItems : null}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Container>
+  )
+  }
 }
 
 export default Lists
