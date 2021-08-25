@@ -20,13 +20,15 @@ const Lists = () => {
   const fetchListUrl = `http://localhost:3001/lists`
 
   const [data, setData] = useState([]);
+  const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [loadList, setLoadList] = useState(false);
-  const [loadListID, setLoadListID] = useState(false)
+  const [loadListID, setLoadListID] = useState(0)
 
   const fetchListItemsUrl = `http://localhost:3001/listitems/${loadListID}`
 
+  // load Lists
   useEffect(() => {
     setLoading(true);
       axios
@@ -41,27 +43,14 @@ const Lists = () => {
         })
   }, [fetchListUrl])
 
-  const openList = (list) => {
+  const openList = async (list) => {
     setLoadList(true);
     setLoading(true)
     setLoadListID(list.ListID);
     axios
-        .get(fetchListItemsUrl)
-        .then((res) => {
-          setData(res.data);
-        })
-        .catch((err) => {
-          setError(err);
-        }).finally(() => {
-          setLoading(false);
-        })
-  }
-
-  if(loadList){
-    axios
-      .get(fetchListUrl)
+      .get(fetchListItemsUrl)
       .then((res) => {
-        setData(res.data);
+        setItems(res.data)
       })
       .catch((err) => {
         setError(err);
@@ -79,10 +68,10 @@ const Lists = () => {
       />
     )})
 
-  const listItems = data.map(list => {
+  const listItems = items.map(list => {
     return (
       <ListItem 
-      key={list.ListID}
+      key={list.ItemID}
       title={list.Title}
       />
     )

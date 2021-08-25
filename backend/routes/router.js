@@ -7,7 +7,7 @@ const router = express.Router()
 
 router.get('/lists', async (req, res) => {
   const lists = await getLists()
-  if(lists){
+  if(lists !== undefined){
     res.status(200).send(JSON.stringify(lists))
   } else {
     res.status(404).send({notFound:"No Lists Found. Please Create a List"})
@@ -16,7 +16,7 @@ router.get('/lists', async (req, res) => {
 
 router.get('/listitems/:id', async (req, res) => {
   const listItems = await getListItems(req.params.id)
-  if(lists){
+  if(listItems !== undefined){
     res.status(200).send(JSON.stringify(listItems))
   } else {
     res.status(404).send({notFound:"No Lists Items found. Please Create an Item"})
