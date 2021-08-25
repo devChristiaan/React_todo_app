@@ -2,10 +2,12 @@ import { TableCell, TableRow } from "@material-ui/core"
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
 
+
+
 const List = (props) => {
   return (
     <TableRow key={props.key}>
-      <TableCell component="th" scope="row">
+      <TableCell component="th" scope="row" onClick={props.openList}>
         {props.title}
       </TableCell>
       <TableCell align="right">

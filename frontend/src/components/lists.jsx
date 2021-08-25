@@ -23,7 +23,9 @@ const Lists = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [loadList, setLoadList] = useState(false);
-  const [loadListID, setLoadListID] = useState(false);
+  const [loadListID, setLoadListID] = useState(false)
+
+  const fetchListItemsUrl = `http://localhost:3001/listitems/${loadListID}`
 
   useEffect(() => {
     setLoading(true);
@@ -40,9 +42,32 @@ const Lists = () => {
   }, [fetchListUrl])
 
   const openList = (list) => {
-    console.log(list);
     setLoadList(true);
+    setLoading(true)
     setLoadListID(list.ListID);
+    axios
+        .get(fetchListItemsUrl)
+        .then((res) => {
+          setData(res.data);
+        })
+        .catch((err) => {
+          setError(err);
+        }).finally(() => {
+          setLoading(false);
+        })
+  }
+
+  if(loadList){
+    axios
+      .get(fetchListUrl)
+      .then((res) => {
+        setData(res.data);
+      })
+      .catch((err) => {
+        setError(err);
+      }).finally(() => {
+        setLoading(false);
+      })
   }
 
   const lists = data.map(list => {
@@ -50,7 +75,7 @@ const Lists = () => {
       <List 
       key={list.ListID}
       title={list.Title}
-      onClick={() => openList(list.ListID)}
+      openList={() => openList(list.ListID)}
       />
     )})
 
