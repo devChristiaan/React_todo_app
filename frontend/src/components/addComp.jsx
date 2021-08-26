@@ -7,18 +7,16 @@ const AddComp = (props) => {
   const placeholder = `Create a New ${props.title}`
   const url = props.url
 
-  const [item, setItem] = useState('')
   const [input, setInput] = useState('')
-  console.log(item)
 
   const inputValue = (e) => {
     e.preventDefault()
-    setItem(e.target.value)
+    setInput(e.target.value)
   }
 
-  const addItem = (item) => {
+  const addItem = () => {
     axios
-      .post(url, {data:{title:item}})
+      .post(url, {title:input})
       .then(() => {
         props.reloadList()
       })
@@ -30,8 +28,8 @@ const AddComp = (props) => {
   return(
     <Paper align="center">
       <Typography variant="h6" gutterBottom>{placeholder}</Typography>
-      <Input value={input} onChange={(e)=> inputValue(e) }/>
-      <Button variant="contained" color="primary" onClick={addItem(item)}>Add</Button>
+      <Input value={input} onChange={(e)=> inputValue(e)}/>
+      <Button variant="contained" color="primary" onClick={addItem}>Add</Button>
     </Paper>
   )
 }
