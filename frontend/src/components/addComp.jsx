@@ -1,32 +1,35 @@
 import { Input, Button, Paper, Typography } from "@material-ui/core"
-import useAdd from '../functions/useAdd.js'
 import { useState } from 'react'
+import axios from 'axios'
 
 const AddComp = (props) => {
 
   const placeholder = `Create a New ${props.title}`
   const url = props.url
 
-  const [item, setItem] = useState('')
-  const [submit,setSubmit] = useState(false)
-  const { data, loading, error } = useAdd(function add(){
-    if (submit){
-      return { item, url} 
-    }
-  })
+  const [input, setInput] = useState('')
 
-  const addItem = (e) => {
-    e.prevent.default()
-    setSubmit(true)
+  const inputValue = (e) => {
+    e.preventDefault()
+    setInput(e.target.value)
+  }
+
+  const addItem = () => {
+    axios
+      .post(url, {title:input})
+      .then(() => {
+        props.reloadList()
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   return(
     <Paper align="center">
-      <form onSubmit={addItem}>
-        <Typography variant="h6" gutterBottom>{placeholder}</Typography>
-        <Input id="standard-basic" onChange={setItem}/>
-        <Button variant="contained" color="primary" type="submit">Add</Button>
-      </form>
+      <Typography variant="h6" gutterBottom>{placeholder}</Typography>
+      <Input value={input} onChange={(e)=> inputValue(e)}/>
+      <Button variant="contained" color="primary" onClick={addItem}>Add</Button>
     </Paper>
   )
 }
