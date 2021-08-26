@@ -26,4 +26,17 @@ const getListItems = (id) => {
   })
 }
 
-export { getLists, getListItems }
+const addList = (title) => {
+  const query = `INSERT INTO lists (Title, Location) VALUES ("${title}", 100);`
+  return new Promise((resolve, reject) => {
+    db.query(query, (err, result) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(result)
+      }
+    })
+  })
+}
+
+export { getLists, getListItems, addList }

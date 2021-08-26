@@ -15,8 +15,10 @@ const useStyles = makeStyles({
 
 const Lists = () => {
   const classes = useStyles();
-  const title = "Lists"
+  const titleLists = "List"
+  const titleItems = "Item"
   const addListUrl = `http://localhost:3001/addlist`
+  const addItemUrl = `http://localhost:3001/addlist`
   const fetchListUrl = `http://localhost:3001/lists`
 
   const [data, setData] = useState([]);
@@ -62,6 +64,21 @@ const Lists = () => {
   const closeList = () => {
     setLoadList(false);
   }
+
+  //Reload New List
+  const reloadList = () => {
+    setLoading(true);
+      axios
+        .get(fetchListUrl)
+        .then((res) => {
+          setData(res.data);
+        })
+        .catch((err) => {
+          setError(err);
+        }).finally(() => {
+          setLoading(false);
+        })
+  }
   //Render Lists Comp
   const lists = data.map(list => {
     return (
@@ -87,8 +104,9 @@ const Lists = () => {
   return(
     <Container>
       <AddComp 
-      title={title}
-      url={addListUrl} />
+      title={titleLists}
+      url={addListUrl}
+      reloadList={reloadList} />
       <TableContainer component={Paper}>
       <Typography variant="h5">Your Todo Lists</Typography>
       <Table className={classes.table} aria-label="simple table">
@@ -110,7 +128,7 @@ const Lists = () => {
     return(
       <Container>
         <AddComp 
-        title={title}
+        title={titleItems}
         url={addListUrl} />
         <TableContainer component={Paper}>
         <Typography variant="h5">Your Todo Items</Typography>
