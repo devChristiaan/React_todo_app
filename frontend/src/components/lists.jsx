@@ -1,4 +1,4 @@
-import { Container, Paper, Typography, TableContainer, Table, TableBody, TableHead, TableCell, TableRow } from "@material-ui/core"
+import { Container, Paper, Typography, TableContainer, Table, TableBody, TableHead, TableCell, TableRow, Button } from "@material-ui/core"
 import { makeStyles } from '@material-ui/core/styles';
 import { useEffect, useState } from "react"
 import axios from 'axios';
@@ -24,9 +24,6 @@ const Lists = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [loadList, setLoadList] = useState(false);
-  const [loadListID, setLoadListID] = useState(0)
-
-  const fetchListItemsUrl = `http://localhost:3001/listitems/${loadListID}`
 
   // load Lists
   useEffect(() => {
@@ -43,10 +40,12 @@ const Lists = () => {
         })
   }, [fetchListUrl])
 
-  const openList = async (list) => {
+  // Open Selected List
+  const openList = async (e, list) => {
+    e.preventDefault()
     setLoadList(true);
     setLoading(true)
-    setLoadListID(list.ListID);
+    const fetchListItemsUrl = `http://localhost:3001/listitems/${list}`
     axios
       .get(fetchListItemsUrl)
       .then((res) => {
@@ -59,15 +58,21 @@ const Lists = () => {
       })
   }
 
+  //Close List
+  const closeList = () => {
+    setLoadList(false);
+  }
+  //Render Lists Comp
   const lists = data.map(list => {
     return (
       <List 
       key={list.ListID}
       title={list.Title}
-      openList={() => openList(list.ListID)}
+      openList={(e) => openList(e, list.ListID)}
       />
     )})
-
+  
+  //Render List Items Comp
   const listItems = items.map(list => {
     return (
       <ListItem 
@@ -77,6 +82,7 @@ const Lists = () => {
     )
   })
 
+  //Choose whether to render list comp or list items comp
   if (!loadList) {
   return(
     <Container>
@@ -120,6 +126,7 @@ const Lists = () => {
             {listItems !== null ? listItems : null}
           </TableBody>
         </Table>
+        <Button variant="contained" color="primary" onClick={closeList}>Back To Lists</Button>
       </TableContainer>
     </Container>
   )

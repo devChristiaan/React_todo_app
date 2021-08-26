@@ -15,6 +15,7 @@ router.get('/lists', async (req, res) => {
 })
 
 router.get('/listitems/:id', async (req, res) => {
+
   const listItems = await getListItems(req.params.id)
   if(listItems !== undefined){
     res.status(200).send(JSON.stringify(listItems))
