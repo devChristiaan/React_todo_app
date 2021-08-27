@@ -1,5 +1,5 @@
 import express from 'express'
-import { getLists, getListItems, addList } from '../functions/routesfuncs.js'
+import { getLists, getListItems, addList, addItem, assignItemList } from '../functions/routesfuncs.js'
 
 const router = express.Router()
 
@@ -27,7 +27,7 @@ router.get('/listitems/:id', async (req, res) => {
 
 //Add a list
 router.post('/addlist', async (req, res) => {
-  const list = await addList(req.body.title)
+  const list = await addList(req.body.content)
   if(list !== undefined){
     res.status(200).send(JSON.stringify(list))
   } else {
@@ -35,14 +35,17 @@ router.post('/addlist', async (req, res) => {
   } 
 })
 
-//Add an Item
-router.post('/test1', async (req, res) => {
+//Add an Item and Assign to list
+router.post('/additem/:id', async (req, res) => {
+  const item = await addItem(req.body.content)
+  if(item !== undefined){
+    const listAdd = await assignItemList(req.params.id, item.insertId)
+    res.status(200).send({message: "Item Added to List"})
+  } else {
+    res.status(404).send({notFound:"No Lists found. Please Create a List"})
+  } 
 
 })
 
-//Assign Item to list
-router.post('test2', async (req, res) => {
-
-})
 
 export default router

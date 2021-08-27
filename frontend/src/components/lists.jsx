@@ -18,7 +18,7 @@ const Lists = () => {
   const titleLists = "List"
   const titleItems = "Item"
   const addListUrl = `http://localhost:3001/addlist`
-  const addItemUrl = `http://localhost:3001/addlist`
+  const addItemUrl = `http://localhost:3001/additem`
   const fetchListUrl = `http://localhost:3001/lists`
 
   const [data, setData] = useState([]);
@@ -26,6 +26,7 @@ const Lists = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [loadList, setLoadList] = useState(false);
+  const [ListID, setListID] = useState(0);
 
   // load Lists
   useEffect(() => {
@@ -43,10 +44,11 @@ const Lists = () => {
   }, [fetchListUrl])
 
   // Open Selected List
-  const openList = async (e, list) => {
-    e.preventDefault()
+  const openList = async (list) => {
+    setListID(list)
     setLoadList(true);
     setLoading(true)
+    console.log(list);
     const fetchListItemsUrl = `http://localhost:3001/listitems/${list}`
     axios
       .get(fetchListItemsUrl)
@@ -85,16 +87,16 @@ const Lists = () => {
       <List 
       key={list.ListID}
       title={list.Title}
-      openList={(e) => openList(e, list.ListID)}
+      openList={() => openList(list.ListID)}
       />
     )})
   
   //Render List Items Comp
-  const listItems = items.map(list => {
+  const listItems = items.map(item => {
     return (
       <ListItem 
-      key={list.ItemID}
-      title={list.Title}
+      key={item.ItemID}
+      content={item.Content}
       />
     )
   })
@@ -129,7 +131,9 @@ const Lists = () => {
       <Container>
         <AddComp 
         title={titleItems}
-        url={addListUrl} />
+        url={addItemUrl}
+        list={ListID}
+        openList={openList} />
         <TableContainer component={Paper}>
         <Typography variant="h5">Your Todo Items</Typography>
         <Table className={classes.table} aria-label="simple table">

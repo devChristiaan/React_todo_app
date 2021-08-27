@@ -6,7 +6,7 @@ const ListItem = (props) => {
   return (
     <TableRow key={props.key}>
       <TableCell component="th" scope="row">
-        {props.title}
+        {props.content}
       </TableCell>
       <TableCell align="right">
         <CreateIcon/>
