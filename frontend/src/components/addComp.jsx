@@ -24,7 +24,11 @@ const AddComp = (props) => {
     axios
       .post(url, {content:input})
       .then(() => {
-        !props.reloadList() && props.openList(list)
+        if(typeof props.openList === 'function') {
+          props.openList(list)
+        } else {
+          props.reloadList()
+        }
       })
       .catch((err) => {
         console.log(err)

@@ -45,11 +45,11 @@ const Lists = () => {
 
   // Open Selected List
   const openList = async (list) => {
+    setListID(list)
     setLoadList(true);
     setLoading(true)
-    setListID(list)
+    console.log(list);
     const fetchListItemsUrl = `http://localhost:3001/listitems/${list}`
-    console.log(fetchListItemsUrl);
     axios
       .get(fetchListItemsUrl)
       .then((res) => {
