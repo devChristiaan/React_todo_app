@@ -5,7 +5,13 @@ import axios from 'axios'
 const AddComp = (props) => {
 
   const placeholder = `Create a New ${props.title}`
-  const url = props.url
+  let url = props.url
+  const list = props.list
+
+  
+  if(list !== undefined) {
+    url = url + `/${list}`
+  }
 
   const [input, setInput] = useState('')
 
@@ -16,13 +22,14 @@ const AddComp = (props) => {
 
   const addItem = () => {
     axios
-      .post(url, {title:input})
+      .post(url, {content:input})
       .then(() => {
-        props.reloadList()
+        !props.reloadList() && props.openList(list)
       })
       .catch((err) => {
         console.log(err)
       })
+      setInput('')
   }
 
   return(

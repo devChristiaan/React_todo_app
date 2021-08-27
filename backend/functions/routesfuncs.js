@@ -39,4 +39,30 @@ const addList = (title) => {
   })
 }
 
-export { getLists, getListItems, addList }
+const addItem = (content) => {
+  const query = `INSERT INTO item (Content, Location) VALUES ("${content}", 100);`
+  return new Promise((resolve, reject) => {
+    db.query(query, (err, result) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(result)
+      }
+    })
+  })
+}
+
+const assignItemList = (listID, itemID) => {
+  const query = `INSERT INTO list_items (ListID, ItemID) VALUES (${listID}, ${itemID});`
+  return new Promise((resolve, reject) => {
+    db.query(query, (err, result) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(result)
+      }
+    })
+  })
+}
+
+export { getLists, getListItems, addList, addItem, assignItemList }
