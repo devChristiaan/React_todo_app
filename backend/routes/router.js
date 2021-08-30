@@ -6,17 +6,10 @@ const router = express.Router()
 router.route('/lists')
   .get(getLists)
 
-//Get all list items
-router.get('/listitems/:id', async (req, res) => {
 
-  const listItems = await getListItems(req.params.id)
-  if(listItems !== undefined){
-    res.status(200).send(JSON.stringify(listItems))
-  } else {
-    res.status(404).send({notFound:"No Lists Items found. Please Create an Item"})
-  } 
+router.route('/listitems/:id')
+  .get(getListItems)
 
-})
 
 //Add a list
 router.post('/addlist', async (req, res) => {
