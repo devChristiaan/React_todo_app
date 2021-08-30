@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import axios from 'axios';
 import AddComp from "./addComp.jsx"
 import List from "./List.jsx"
-import ListItem from "./ListItems.jsx";
+import ListItem from "./ListItem.jsx";
 
 
 const useStyles = makeStyles({
@@ -17,9 +17,8 @@ const Lists = () => {
   const classes = useStyles();
   const titleLists = "List"
   const titleItems = "Item"
-  const addListUrl = `http://localhost:3001/addlist`
-  const addItemUrl = `http://localhost:3001/additem`
-  const fetchListUrl = `http://localhost:3001/lists`
+  const itemsUrl = `${process.env.REACT_APP_API + "listitems/"}`
+  const listUrl = `${process.env.REACT_APP_API + "lists/"}`
 
   const [data, setData] = useState([]);
   const [items, setItems] = useState([]);
@@ -32,7 +31,7 @@ const Lists = () => {
   useEffect(() => {
     setLoading(true);
       axios
-        .get(fetchListUrl)
+        .get(listUrl)
         .then((res) => {
           setData(res.data);
         })
@@ -41,17 +40,16 @@ const Lists = () => {
         }).finally(() => {
           setLoading(false);
         })
-  }, [fetchListUrl])
+  }, [listUrl])
 
   // Open Selected List
   const openList = async (list) => {
     setListID(list)
     setLoadList(true);
     setLoading(true)
-    console.log(list);
-    const fetchListItemsUrl = `http://localhost:3001/listitems/${list}`
+    const fetchListItems = `${itemsUrl+list}`
     axios
-      .get(fetchListItemsUrl)
+      .get(fetchListItems)
       .then((res) => {
         setItems(res.data)
       })
@@ -71,7 +69,7 @@ const Lists = () => {
   const reloadList = () => {
     setLoading(true);
       axios
-        .get(fetchListUrl)
+        .get(listUrl)
         .then((res) => {
           setData(res.data);
         })
@@ -107,7 +105,7 @@ const Lists = () => {
     <Container>
       <AddComp 
       title={titleLists}
-      url={addListUrl}
+      url={listUrl}
       reloadList={reloadList} />
       <TableContainer component={Paper}>
       <Typography variant="h5">Your Todo Lists</Typography>
@@ -131,7 +129,7 @@ const Lists = () => {
       <Container>
         <AddComp 
         title={titleItems}
-        url={addItemUrl}
+        url={itemsUrl}
         list={ListID}
         openList={openList} />
         <TableContainer component={Paper}>
