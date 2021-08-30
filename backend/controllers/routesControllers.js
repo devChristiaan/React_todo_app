@@ -47,39 +47,38 @@ const addList = (req, res, next) => {
       if (err) {
         res.status(404).send({notFound:"No Lists found. Please Create a List"})
       } else {
-        res.status(200).send(JSON.stringify(result))
+        res.status(200).send({success:"List added successfully"})
       }
     })
 }
 
-// @desc    Get all lists
-// @route   GET /api/v1/lists
-const addItem = (content) => {
-  const query = `INSERT INTO item (Content, Location) VALUES ("${content}", 100);`
-  return new Promise((resolve, reject) => {
-    db.query(query, (err, result) => {
-      if (err) {
-        reject(err)
-      } else {
-        resolve(result)
-      }
-    })
+// @desc    Add item and assign item to list
+// @route   POST /api/v1/listitems/:id
+const addItem = (req, res, next) => {
+  
+  const query = `INSERT INTO item (Content, Location) VALUES ("${req.body.content}", 100);`
+  
+  db.query(query, (err, result) => {
+    if (err) {
+      res.status(404).send({notFound:"Cannot create item"})
+    } else {
+      assignItemList(req.params.id, result)
+    }
   })
-}
 
-// @desc    Get all lists
-// @route   GET /api/v1/lists
-const assignItemList = (listID, itemID) => {
-  const query = `INSERT INTO list_items (ListID, ItemID) VALUES (${listID}, ${itemID});`
-  return new Promise((resolve, reject) => {
-    db.query(query, (err, result) => {
-      if (err) {
-        reject(err)
-      } else {
-        resolve(result)
-      }
-    })
-  })
-}
+  const assignItemList = (listID, item) => {
+  
+    const query = `INSERT INTO list_items (ListID, ItemID) VALUES (${listID}, ${item.insertId});`
+    
+      db.query(query, (err, result) => {
+        if (err) {
+          res.status(404).send({notFound:"No Lists found to add item. Please Create a List first"})
+        } else {
+          res.status(200).send({message: "Item Added to List"})
+        }
+      })
+    }
+  }
 
-export { getLists, getListItems, addList, addItem, assignItemList }
+
+export { getLists, getListItems, addList, addItem }
