@@ -1,5 +1,5 @@
 import express from 'express'
-import { getLists, getListItems, addList, addItem, assignItemList } from '../functions/routesfuncs.js'
+import { getLists, getListItems, addList, addItem, assignItemList } from '../controllers/routesControllers.js'
 
 const router = express.Router()
 

@@ -7,14 +7,14 @@ import router from './routes/router.js';
 
 //Instantiate the app
 const app = express();
-dotenv.config();
+dotenv.config({path: './config.env'});
 
 //Global Middleware Setup
 app.use(cors());
 app.use(express.json())
 
 //Routes
-app.use('/', router)
+app.use('/api/v1/router', router)
 
 const port = process.env.PORT || 9001;
 
