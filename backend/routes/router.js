@@ -5,21 +5,12 @@ const router = express.Router()
 
 router.route('/lists')
   .get(getLists)
+  .post(addList)
 
 
 router.route('/listitems/:id')
   .get(getListItems)
 
-
-//Add a list
-router.post('/addlist', async (req, res) => {
-  const list = await addList(req.body.content)
-  if(list !== undefined){
-    res.status(200).send(JSON.stringify(list))
-  } else {
-    res.status(404).send({notFound:"No Lists found. Please Create a List"})
-  } 
-})
 
 //Add an Item and Assign to list
 router.post('/additem/:id', async (req, res) => {

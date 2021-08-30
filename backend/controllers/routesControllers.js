@@ -19,7 +19,7 @@ const getLists = (req, res, next) => {
 
 }
 
-// @desc    Get all lists items
+// @desc    Get all list items
 // @route   GET /api/v1/listitems/:id
 const getListItems = (req, res, next) => {
   
@@ -38,19 +38,18 @@ const getListItems = (req, res, next) => {
   }
 }
     
-// @desc    Get all lists
-// @route   GET /api/v1/lists
-const addList = (title) => {
-  const query = `INSERT INTO lists (Title, Location) VALUES ("${title}", 100);`
-  return new Promise((resolve, reject) => {
+// @desc    Add a new List
+// @route   POST /api/v1/lists
+const addList = (req, res, next) => {
+
+  const query = `INSERT INTO lists (Title, Location) VALUES ("${req.body.content}", 100);`
     db.query(query, (err, result) => {
       if (err) {
-        reject(err)
+        res.status(404).send({notFound:"No Lists found. Please Create a List"})
       } else {
-        resolve(result)
+        res.status(200).send(JSON.stringify(result))
       }
     })
-  })
 }
 
 // @desc    Get all lists
