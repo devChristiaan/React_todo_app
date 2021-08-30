@@ -3,15 +3,8 @@ import { getLists, getListItems, addList, addItem, assignItemList } from '../con
 
 const router = express.Router()
 
-//Get all lists
-router.get('/lists', async (req, res) => {
-  const lists = await getLists()
-  if(lists !== undefined){
-    res.status(200).send(JSON.stringify(lists))
-  } else {
-    res.status(404).send({notFound:"No Lists Found. Please Create a List"})
-  } 
-})
+router.route('/lists')
+  .get(getLists)
 
 //Get all list items
 router.get('/listitems/:id', async (req, res) => {

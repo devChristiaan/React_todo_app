@@ -1,16 +1,22 @@
 import { db } from './dbconnection.js'
 
-const getLists = () => {
-  const query = `SELECT * FROM lists`
-  return new Promise((resolve, reject) => {
+// @desc    Get all lists
+// @route   GET /api/v1/lists
+const getLists = (req, res, next) => {
+  try {
+    const query = `SELECT * FROM lists`
+
     db.query(query, (err, result) => {
       if (err) {
-        reject(err)
+        res.status(404).send({notFound:"No Lists Found. Please Create a List"})
       } else {
-        resolve(result)
+        res.status(200).send(JSON.stringify(result))
       }
     })
-  })
+  } catch (err) {
+    res.status(500).send({error: err.message})
+  }
+
 }
 
 const getListItems = (id) => {
