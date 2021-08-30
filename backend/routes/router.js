@@ -1,5 +1,5 @@
 import express from 'express'
-import { getLists, getListItems, addList, addItem } from '../controllers/routesControllers.js'
+import { getLists, getListItems, addList, addItem, deleteItem } from '../controllers/routesControllers.js'
 
 const router = express.Router()
 
@@ -11,6 +11,7 @@ router.route('/lists')
 router.route('/listitems/:id')
   .get(getListItems)
   .post(addItem)
+  .delete(deleteItem)
 
 
 export default router

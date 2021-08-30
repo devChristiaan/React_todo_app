@@ -80,5 +80,32 @@ const addItem = (req, res, next) => {
     }
   }
 
+// @desc    Delete item and remove item from list
+// @route   DELETE /api/v1/listitems/:id
+const deleteItem = (req, res, next) => {
+  
+  const query = `DELETE FROM list_items WHERE ItemID = "${req.params.id}" && ListID = "${req.body.ListID}"`
 
-export { getLists, getListItems, addList, addItem }
+  db.query(query, (err, result) => {
+    if (err) {
+      res.status(404).send({notFound:"No list or item found"})
+    } else {
+      removeItem()
+    }
+  })
+
+  const removeItem = () => {
+    const query2 = `DELETE FROM item WHERE ItemID = "${req.params.id}"`
+
+    db.query(query2, (err, result) => {
+      if (err) {
+        res.status(404).send({notFound:"No Items found to delete"})
+      } else {
+        res.status(200).send({message: "Item Deleted Successfully"})
+      }
+    })
+  }
+}
+
+
+export { getLists, getListItems, addList, addItem, deleteItem }

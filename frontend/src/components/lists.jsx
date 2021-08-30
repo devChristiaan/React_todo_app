@@ -37,10 +37,11 @@ const Lists = () => {
         })
         .catch((err) => {
           setError(err);
+          console.log(error)
         }).finally(() => {
           setLoading(false);
         })
-  }, [listUrl])
+  }, [listUrl, error])
 
   // Open Selected List
   const openList = async (list) => {
