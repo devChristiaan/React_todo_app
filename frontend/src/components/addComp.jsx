@@ -10,7 +10,7 @@ const AddComp = (props) => {
 
   
   if(list !== undefined) {
-    url = url + `/${list}`
+    url = url + `${list}`
   }
 
   const [input, setInput] = useState('')
