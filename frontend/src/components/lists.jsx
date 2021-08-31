@@ -44,7 +44,7 @@ const Lists = () => {
   }, [listUrl, error])
 
   // Open Selected List
-  const openList = async (list) => {
+  const openList = (list) => {
     setListID(list)
     setLoadList(true);
     setLoading(true)
@@ -80,6 +80,12 @@ const Lists = () => {
           setLoading(false);
         })
   }
+
+  // Reload Items
+  const reloadItems = () => {
+    openList(ListID)
+  }
+
   //Render Lists Comp
   const lists = data.map(list => {
     return (
@@ -96,12 +102,17 @@ const Lists = () => {
       <ListItem 
       key={item.ItemID}
       content={item.Content}
+      ItemId={item.ItemID}
+      ListId={ListID}
+      url={itemsUrl}
+      reloadItems={reloadItems}
       />
     )
   })
 
   //Choose whether to render list comp or list items comp
   if (!loadList) {
+    //TO DO Lists
   return(
     <Container>
       <AddComp 
@@ -126,6 +137,7 @@ const Lists = () => {
     </Container>
   )
   } else {
+    //TO DO Items
     return(
       <Container>
         <AddComp 
