@@ -107,5 +107,22 @@ const deleteItem = (req, res, next) => {
   }
 }
 
+// @desc    Delete List and all list items
+// @route   DELETE /api/v1/list/:id
+const deleteList = (req, res, next) => {
+  
+  let listItems = getListItems(req.params.id)
 
-export { getLists, getListItems, addList, addItem, deleteItem }
+  const query = `DELETE FROM list WHERE ListID = "${req.params.id}"`
+
+  db.query(query, (err, result) => {
+    if (err) {
+      res.status(404).send({notFound:"List not found"})
+    } else {
+      removeItem()
+    }
+  })
+}
+
+
+export { getLists, getListItems, addList, addItem, deleteItem, deleteList }
