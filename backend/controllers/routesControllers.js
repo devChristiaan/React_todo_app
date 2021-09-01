@@ -109,19 +109,63 @@ const deleteItem = (req, res, next) => {
 
 // @desc    Delete List and all list items
 // @route   DELETE /api/v1/list/:id
-const deleteList = (req, res, next) => {
-  
-  let listItems = getListItems(req.params.id)
+const deleteList = async (req, res, next) => {
 
-  const query = `DELETE FROM list WHERE ListID = "${req.params.id}"`
+  const listItems = (id) => {
+    return new Promise((resolve) => {
+      const query = `select * from item INNER JOIN list_items ON list_items.ListID = ${id} && item.ItemID = list_items.ItemID`
 
-  db.query(query, (err, result) => {
-    if (err) {
-      res.status(404).send({notFound:"List not found"})
-    } else {
-      removeItem()
+    const setItems = (results) => {
+      resolve(results.map(item => item.ItemID))
     }
+
+    db.query(query, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        let data = JSON.stringify(result)
+        setItems(JSON.parse(data))
+      }
+    })
+   
   })
+}
+
+  let list = await listItems(req.params.id)
+
+  const deleteListItems = (list) => {
+    return new Promise((resolve) => {
+      const query = `DELETE FROM item WHERE (ItemID) IN (?)`
+
+      db.query(query, [list], (err, result) => {
+        if (err) {
+          console.log(err);
+          res.status(404).send({notFound:"List list items not found"})
+        } else {
+          resolve(result)
+        }
+      })
+    })
+  }
+
+  await deleteListItems(list)
+  
+  const deleteList = () => {
+    return new Promise((resolve) => {
+      const query = `DELETE FROM lists WHERE ListID = "${req.params.id}"`
+
+    db.query(query, (err, result) => {
+      if (err) {
+        res.status(404).send({notFound:"List not found"})
+      } else {
+        res.status(200).send({message: "List Deleted Successfully"})
+      }
+    })
+    })
+  }
+
+  await deleteList()
+
 }
 
 
