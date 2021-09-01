@@ -1,14 +1,16 @@
 import { TableCell, TableRow } from "@material-ui/core"
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
-
+import { deleteList } from '../functions/helpers.js'
 
 
 const List = (props) => {
 
-  const deleteList = () => {
-
+  const deleteCurrentList = (id, url, reload) => {
+    deleteList(id, url)
+    reload(id)
   }
+  
 
   return (
     <TableRow key={props.key}>
@@ -17,7 +19,7 @@ const List = (props) => {
       </TableCell>
       <TableCell align="right">
         <CreateIcon/>
-        <DeleteIcon onClick={(e) => deleteList()}/>
+        <DeleteIcon onClick={() => deleteCurrentList(props.listId, props.url, props.reload)}/>
       </TableCell>
     </TableRow>
   );

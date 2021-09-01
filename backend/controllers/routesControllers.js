@@ -133,6 +133,7 @@ const deleteList = async (req, res, next) => {
 
   let list = await listItems(req.params.id)
 
+  
   const deleteListItems = (list) => {
     return new Promise((resolve) => {
       const query = `DELETE FROM item WHERE (ItemID) IN (?)`
@@ -148,7 +149,7 @@ const deleteList = async (req, res, next) => {
     })
   }
 
-  await deleteListItems(list)
+  if (list.length > 0) await deleteListItems(list)
   
   const deleteList = () => {
     return new Promise((resolve) => {
@@ -165,6 +166,22 @@ const deleteList = async (req, res, next) => {
   }
 
   await deleteList()
+
+  const deleteJoin = () => {
+    return new Promise((resolve) => {
+      const query = `DELETE FROM list_items WHERE ListID = "${req.params.id}"`
+
+    db.query(query, (err, result) => {
+      if (err) {
+        res.status(404).send({notFound:"List not found"})
+      } else {
+        res.status(200).send({message: "List Deleted Successfully"})
+      }
+    })
+    })
+  }
+
+  await deleteJoin()
 
 }
 
