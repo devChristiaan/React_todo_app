@@ -10,4 +10,14 @@ const deleteToDo = (ItemId, ListId, url) => {
   })
 }
 
-export { deleteToDo }
+const deleteList = (ListId, url) => {
+  axios.delete(url + ListId)
+  .then((res) => {
+    return res.data;
+  })
+  .catch((err) => {
+    console.log(err);
+  })
+}
+
+export { deleteToDo, deleteList }

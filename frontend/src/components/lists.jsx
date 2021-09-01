@@ -91,7 +91,9 @@ const Lists = () => {
     return (
       <List 
       key={list.ListID}
+      listId={list.ListID}
       title={list.Title}
+      url={listUrl}
       openList={() => openList(list.ListID)}
       />
     )})
