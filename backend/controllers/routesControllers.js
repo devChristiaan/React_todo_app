@@ -185,5 +185,16 @@ const deleteList = async (req, res, next) => {
 
 }
 
+const renameList = (req, res, next) => {
+  const query = `UPDATE lists SET Title = "${req.body.content}" WHERE ListID = "${req.params.id}"`
 
-export { getLists, getListItems, addList, addItem, deleteItem, deleteList }
+  db.query(query, (err, result) => {
+    if (err) {
+      res.status(404).send({notFound:"List not found"})
+    } else {
+      res.status(200).send({message: "List Renamed Successfully"})
+    }
+  })
+}
+
+export { getLists, getListItems, addList, addItem, deleteItem, deleteList, renameList }

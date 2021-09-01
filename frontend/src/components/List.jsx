@@ -35,7 +35,7 @@ const List = (props) => {
       )
     } else {
       return(
-        <TableCell>
+        <TableCell component="th" scope="row">
           <TextField id="standard-basic" label={props.title}/>
         </TableCell>
       )
