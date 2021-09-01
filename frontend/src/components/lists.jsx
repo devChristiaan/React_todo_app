@@ -94,7 +94,6 @@ const Lists = () => {
       listId={list.ListID}
       title={list.Title}
       url={listUrl}
-      reload={reloadList}
       openList={() => openList(list.ListID)}
       />
     )})

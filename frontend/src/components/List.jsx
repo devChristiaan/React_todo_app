@@ -1,3 +1,4 @@
+import { useHistory } from 'react-router-dom'
 import { TableCell, TableRow } from "@material-ui/core"
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -6,9 +7,11 @@ import { deleteList } from '../functions/helpers.js'
 
 const List = (props) => {
 
-  const deleteCurrentList = (id, url, reload) => {
+  const history = useHistory()
+
+  const deleteCurrentList = (id, url) => {
     deleteList(id, url)
-    reload(id)
+    history.go(0)
   }
   
 
@@ -19,7 +22,7 @@ const List = (props) => {
       </TableCell>
       <TableCell align="right">
         <CreateIcon/>
-        <DeleteIcon onClick={() => deleteCurrentList(props.listId, props.url, props.reload)}/>
+        <DeleteIcon onClick={() => deleteCurrentList(props.listId, props.url, history)}/>
       </TableCell>
     </TableRow>
   );
