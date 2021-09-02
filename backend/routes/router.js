@@ -1,5 +1,5 @@
 import express from 'express'
-import { getLists, getListItems, addList, addItem, deleteItem, deleteList } from '../controllers/routesControllers.js'
+import { getLists, getListItems, addList, addItem, deleteItem, deleteList, renameList } from '../controllers/routesControllers.js'
 
 const router = express.Router()
 
@@ -9,6 +9,7 @@ router.route('/lists')
   
 router.route('/lists/:id')
   .delete(deleteList)
+  .patch(renameList)
 
 
 

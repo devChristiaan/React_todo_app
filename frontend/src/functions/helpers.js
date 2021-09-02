@@ -20,4 +20,14 @@ const deleteList = (ListId, url) => {
   })
 }
 
-export { deleteToDo, deleteList }
+const renameList = (NewTitle, ListId, url) => {
+  axios.patch(url + ListId, {data:{title: NewTitle}})
+  .then((res) => {
+    return res.data;
+  })
+  .catch((err) => {
+    console.log(err);
+  })
+}
+
+export { deleteToDo, deleteList, renameList }
