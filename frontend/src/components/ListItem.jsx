@@ -18,9 +18,11 @@ const ListItem = (props) => {
     reloadItems(ListId)
   }
 
-  const handleItemRename = (itemId, updateUrl, reloadItems, listId, content) => {
+  const handleItemRename = (itemId, updateUrl, reloadItems, ListId, content) => {
     renameItem(itemId, updateUrl, content)
-    reloadItems(listId)
+    setContent(content)
+    reloadItems(ListId)
+    setEdit(false)
   }
 
   const handleContentChange = (e) => {
@@ -42,7 +44,7 @@ const ListItem = (props) => {
       return (
         <>
         <TableCell component="th" scope="row">
-          {props.content}
+          {content}
         </TableCell>
         <TableCell align="right">
           <CreateIcon onClick={editItem}/>
@@ -54,10 +56,10 @@ const ListItem = (props) => {
       return (
         <>
         <TableCell component="th" scope="row">
-          <TextField onChange={(e) => handleContentChange(e)}id="standard-basic" label={props.content}/>
+          <TextField value={content} onChange={(e) => handleContentChange(e)}id="standard-basic" label={props.content}/>
         </TableCell>
         <TableCell align="right">
-        <SaveIcon onClick={(e) => handleItemRename(props.ItemId, props.updateUrl, props.reloadItems, props.listId, content)}/>
+        <SaveIcon onClick={(e) => handleItemRename(props.ItemId, props.updateUrl, props.reloadItems, props.ListId, content)}/>
           <DeleteIcon onClick={(e) => deleteItem(props.ItemId, props.ListId, props.url ,props.reloadItems)}/>
         </TableCell>
         </>
