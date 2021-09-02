@@ -185,8 +185,10 @@ const deleteList = async (req, res, next) => {
 
 }
 
+// @desc    Rename List
+// @route   PATCH /api/v1/list/:id
 const renameList = (req, res, next) => {
-  const query = `UPDATE lists SET Title = "${req.body.content}" WHERE ListID = "${req.params.id}"`
+  const query = `UPDATE lists SET Title = "${req.body.data.title}" WHERE ListID = "${req.params.id}"`
 
   db.query(query, (err, result) => {
     if (err) {
