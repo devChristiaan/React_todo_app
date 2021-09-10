@@ -14,10 +14,12 @@ const useStyles = makeStyles({
 });
 
 const Lists = () => {
+
   const classes = useStyles();
   const titleLists = "List"
   const titleItems = "Item"
   const itemsUrl = `${process.env.REACT_APP_API + "listitems/"}`
+  const itemUrl = `${process.env.REACT_APP_API + "item/"}`
   const listUrl = `${process.env.REACT_APP_API + "lists/"}`
 
   const [data, setData] = useState([]);
@@ -107,6 +109,7 @@ const Lists = () => {
       ItemId={item.ItemID}
       ListId={ListID}
       url={itemsUrl}
+      updateUrl={itemUrl}
       reloadItems={reloadItems}
       />
     )

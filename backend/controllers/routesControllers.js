@@ -199,4 +199,20 @@ const renameList = (req, res, next) => {
   })
 }
 
-export { getLists, getListItems, addList, addItem, deleteItem, deleteList, renameList }
+
+// @desc    Rename Item
+// @route   PATCH /api/v1/item/:id
+const renameItem = (req, res, next) => {
+  const query = `UPDATE item SET Content = "${req.body.data.content}" WHERE ItemID = "${req.params.id}"`
+
+  db.query(query, (err, result) => {
+    if (err) {
+      res.status(404).send({notFound:"Item not found"})
+    } else {
+      res.status(200).send({message: "Item Renamed Successfully"})
+    }
+  })
+}
+
+
+export { getLists, getListItems, addList, addItem, deleteItem, deleteList, renameList, renameItem }

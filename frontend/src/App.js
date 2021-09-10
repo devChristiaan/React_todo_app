@@ -1,4 +1,5 @@
 import Home from "./pages/home.jsx"
+import Note from "./pages/Note.jsx"
 import { CssBaseline } from '@material-ui/core';
 import { BrowserRouter } from "react-router-dom";
 
@@ -9,6 +10,7 @@ function App() {
       <BrowserRouter>
         <CssBaseline />
         <Home />
+        <Note />
       </BrowserRouter>
     </>
   );

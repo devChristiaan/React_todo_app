@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 
 //Import Routes
 import router from './routes/router.js';
+import notepadRouter from './routes/notepadRouter.js';
 
 //Instantiate the app
 const app = express();
@@ -15,6 +16,7 @@ app.use(express.json())
 
 //Routes
 app.use('/api/v1/router', router)
+app.use('/api/v1/notepad', notepadRouter)
 
 const port = process.env.PORT || 9001;
 
