@@ -37,14 +37,14 @@ const getNote = (req, res) => {
 // @route   PATCH /api/v1/notepad
 const updateNote = (req, res) => {
   
-  const query = `INSERT INTO notes (Title, Content) VALUES ('${req.body.Title}', '${req.body.Content}')`
+  const query = `UPDATE notes SET Title = "${req.body.Title}", Content = "${req.body.Content}" WHERE NoteID = "${req.body.NoteID}";`
   
   db.query(query, (err, result) => {
     if (err) {
       console.log(err)
-      res.status(500).send({error: 'Error creating note'})
+      res.status(500).send({error: 'Error Editing Note'})
     } else {
-      res.status(200).send({success: 'Notepad created successfully'})
+      res.status(200).send({success: 'Note edited Successfully'})
     }
   })
 }
