@@ -4,6 +4,7 @@ import { createNote, getNote, updateNote } from '../controllers/notepadRouterCon
 const notepadRouter = express.Router()
 
 notepadRouter.route('/')
+  //retieve all notes
   .get(getNote)
   .patch(updateNote)
   .post(createNote)
