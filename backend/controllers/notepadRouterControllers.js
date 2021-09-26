@@ -27,7 +27,7 @@ const createNote = (req, res) => {
 const getNote = (req, res) => {
   // Need to update the function to take in the id of the note to be updated
 
-  dbpool.getConnection((err, connection) => {
+  dbPool.getConnection((err, connection) => {
     if (err) throw err
     const query = `SELECT * FROM notes`
   
@@ -47,16 +47,22 @@ const getNote = (req, res) => {
 // @route   PATCH /api/v1/notepad
 const updateNote = (req, res) => {
   
-  const query = `UPDATE notes SET Title = "${req.body.Title}", Content = "${req.body.Content}" WHERE NoteID = "${req.body.NoteID}";`
+  dbPool.getConnection((err, connection) => {
+    
+    const query = `UPDATE notes SET Title = ?, Content = ? WHERE NoteID = ?;`
   
-  db.query(query, (err, result) => {
+    connection.query(query, [req.body.Title, req.body.Content ,req.body.NoteID], (err, result) => {
     if (err) {
       console.log(err)
       res.status(500).send({error: 'Error Editing Note'})
+      connection.release();
     } else {
       res.status(200).send({success: 'Note edited Successfully'})
+      connection.release();
     }
+    })
   })
+  
 }
 
 export { createNote, getNote, updateNote }
