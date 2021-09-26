@@ -1,4 +1,4 @@
-import { db } from './dbconnection.js'
+import { dbpool } from './dbconnection.js'
 
 // @desc    Get all lists
 // @route   GET /api/v1/lists
@@ -24,9 +24,9 @@ const getLists = (req, res, next) => {
 const getListItems = (req, res, next) => {
   
   try {
-    const query = `select * from item INNER JOIN list_items ON list_items.ListID = ${req.params.id} && item.ItemID = list_items.ItemID`
+    const query = `select * from item INNER JOIN list_items ON list_items.ListID = ? && item.ItemID = list_items.ItemID`
 
-    db.query(query, (err, result) => {
+    db.query(query, [req.params.id], (err, result) => {
       if (err) {
         res.status(404).send({notFound:"No Lists Items found. Please Create an Item"})
       } else {

@@ -1,4 +1,4 @@
-import { db } from './dbconnection.js'
+import { dbpool } from './dbconnection.js'
 
 // @desc    Create a new Note
 // @route   POST /api/v1/notepad
@@ -21,15 +21,19 @@ const createNote = (req, res) => {
 const getNote = (req, res) => {
   // Need to update the function to take in the id of the note to be updated
 
-  const query = `SELECT * FROM notes`
+  dbpool.getConnection((err, connection) => {
+    if (err) throw err
+    const query = `SELECT * FROM notes`
   
-  db.query(query, (err, result) => {
-    if (err) {
-      console.log(err)
-      res.status(500).send({error: 'Error creating note'})
-    } else {
-      res.status(200).send(JSON.stringify(result))
-    }
+    connection.query(query, (err, result) => {
+      if (err) {
+        res.status(500).send({error: 'Error creating note'})
+        connection.release();
+      } else {
+        res.status(200).send(JSON.stringify(result))
+        connection.release();
+      }
+    })
   })
 }
 
