@@ -7,7 +7,7 @@ const createNote = (req, res) => {
   dbPool.getConnection((err, connection) => {
     if (err) throw err
 
-    const query = `INSERT INTO notes (Title, Content) VALUES (?, ?)`
+    const query = `INSERT INTO notes (Title, Content) VALUES (?, ?);`
 
     connection.query(query, [req.body.Title, req.body.Content], (err, result) => {
       if (err) {
@@ -29,7 +29,7 @@ const getNote = (req, res) => {
 
   dbPool.getConnection((err, connection) => {
     if (err) throw err
-    const query = `SELECT * FROM notes`
+    const query = `SELECT * FROM notes;`
   
     connection.query(query, (err, result) => {
       if (err) {
@@ -51,7 +51,7 @@ const updateNote = (req, res) => {
     
     const query = `UPDATE notes SET Title = ?, Content = ? WHERE NoteID = ?;`
   
-    connection.query(query, [req.body.Title, req.body.Content ,req.body.NoteID], (err, result) => {
+    connection.query(query, [req.body.Title, req.body.Content, req.body.NoteID], (err, result) => {
     if (err) {
       console.log(err)
       res.status(500).send({error: 'Error Editing Note'})
