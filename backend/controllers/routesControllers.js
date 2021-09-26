@@ -144,77 +144,101 @@ const deleteItem = (req, res, next) => {
 // @route   DELETE /api/v1/list/:id
 const deleteList = async (req, res, next) => {
 
-  const listItems = (id) => {
-    return new Promise((resolve) => {
-      const query = `select * from item INNER JOIN list_items ON list_items.ListID = ${id} && item.ItemID = list_items.ItemID`
+const listItems = (id) => {
+  return new Promise((resolve) => {
+    dbPool.getConnection((err, connection) => {
+      if(err) throw err
 
-    const setItems = (results) => {
-      resolve(results.map(item => item.ItemID))
-    }
+      const query = 'select * from item INNER JOIN list_items ON list_items.ListID = ? && item.ItemID = list_items.ItemID'
 
-    db.query(query, (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        let data = JSON.stringify(result)
-        setItems(JSON.parse(data))
+      const setItems = (results) => {
+        resolve(results.map(item => item.ItemID))
       }
+
+      connection.query(query, [id], (err, result) => {
+        if (err) {
+          console.log(err);
+          connection.release()
+        } else {
+          let data = JSON.stringify(result)
+          connection.release()
+          setItems(JSON.parse(data))
+        }
+      })
     })
-   
   })
 }
 
-  let list = await listItems(req.params.id)
+let list = await listItems(req.params.id)
 
   
-  const deleteListItems = (list) => {
-    return new Promise((resolve) => {
-      const query = `DELETE FROM item WHERE (ItemID) IN (?)`
+const deleteListItems = (list) => {
+  return new Promise((resolve) => {
+    dbPool.getConnection((err, connection) => {
+      if(err) throw err
 
-      db.query(query, [list], (err, result) => {
+      const query = 'DELETE FROM item WHERE (ItemID) IN (?)'
+
+      connection.query(query, [list], (err, result) => {
         if (err) {
           console.log(err);
           res.status(404).send({notFound:"List list items not found"})
+          connection.release()
         } else {
+          connection.release()
           resolve(result)
         }
       })
     })
-  }
+  })
+}
 
-  if (list.length > 0) await deleteListItems(list)
-  
-  const deleteList = () => {
-    return new Promise((resolve) => {
-      const query = `DELETE FROM lists WHERE ListID = "${req.params.id}"`
+if (list.length > 0) await deleteListItems(list)
 
-    db.query(query, (err, result) => {
-      if (err) {
-        res.status(404).send({notFound:"List not found"})
-      } else {
-        res.status(200).send({message: "List Deleted Successfully"})
-      }
+const deleteList = () => {
+  return new Promise((resolve) => {
+    dbPool.getConnection((err, connection) => {
+      if(err) throw err
+      const query = 'DELETE FROM lists WHERE ListID = ?;'
+
+      connection.query(query, [req.params.id], (err, result) => {
+        if (err) {
+          res.status(404).send({notFound:"List not found"})
+          connection.release()
+        } else {
+          res.status(200).send({message: "List Deleted Successfully"})
+          connection.release()
+          resolve()
+        }
+      })
     })
+  })
+}
+
+await deleteList()
+
+const deleteJoin = () => {
+  return new Promise((resolve) => {
+    dbPool.getConnection((err, connection) => {
+      if(err) throw err
+
+      const query = 'DELETE FROM list_items WHERE ListID = ?'
+
+      connection.query(query, [req.params.id], (err, result) => {
+        if (err) {
+          res.status(404).send({notFound:"List not found"})
+          connection.release()
+        } else {
+          res.status(200).send({message: "List Deleted Successfully"})
+          connection.release()
+          resolve()
+        }
+      })
     })
-  }
+  })
+}
 
-  await deleteList()
-
-  const deleteJoin = () => {
-    return new Promise((resolve) => {
-      const query = `DELETE FROM list_items WHERE ListID = "${req.params.id}"`
-
-    db.query(query, (err, result) => {
-      if (err) {
-        res.status(404).send({notFound:"List not found"})
-      } else {
-        res.status(200).send({message: "List Deleted Successfully"})
-      }
-    })
-    })
-  }
-
-  await deleteJoin()
+await deleteJoin()
 
 }
 
