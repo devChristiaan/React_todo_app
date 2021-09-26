@@ -106,26 +106,36 @@ const addItem = (req, res, next) => {
 // @desc    Delete item and remove item from list
 // @route   DELETE /api/v1/listitems/:id
 const deleteItem = (req, res, next) => {
-  
-  const query = `DELETE FROM list_items WHERE ItemID = "${req.params.id}" && ListID = "${req.body.ListID}"`
 
-  db.query(query, (err, result) => {
-    if (err) {
-      res.status(404).send({notFound:"No list or item found"})
-    } else {
-      removeItem()
-    }
+  dbPool.getConnection((err, connection) => {
+    const query = 'DELETE FROM list_items WHERE ItemID = ? && ListID = ?'
+
+    connection.query(query, [req.params.id, req.body.ListID], (err, result) => {
+      if (err) {
+        res.status(404).send({notFound:"No list or item found"})
+        connection.release()
+      } else {
+        removeItem()
+        connection.release()
+      }
+    })
   })
 
   const removeItem = () => {
-    const query2 = `DELETE FROM item WHERE ItemID = "${req.params.id}"`
+    dbPool.getConnection((err, connection) => {
+      if(err) throw err
 
-    db.query(query2, (err, result) => {
-      if (err) {
-        res.status(404).send({notFound:"No Items found to delete"})
-      } else {
-        res.status(200).send({message: "Item Deleted Successfully"})
-      }
+      const query2 = 'DELETE FROM item WHERE ItemID = ?'
+
+      connection.query(query2, [req.params.id], (err, result) => {
+        if (err) {
+          res.status(404).send({notFound:"No Items found to delete"})
+          connection.release()
+        } else {
+          res.status(200).send({message: "Item Deleted Successfully"})
+          connection.release()
+        }
+      })
     })
   }
 }
@@ -211,14 +221,21 @@ const deleteList = async (req, res, next) => {
 // @desc    Rename List
 // @route   PATCH /api/v1/list/:id
 const renameList = (req, res, next) => {
-  const query = `UPDATE lists SET Title = "${req.body.data.title}" WHERE ListID = "${req.params.id}"`
 
-  db.query(query, (err, result) => {
-    if (err) {
-      res.status(404).send({notFound:"List not found"})
-    } else {
-      res.status(200).send({message: "List Renamed Successfully"})
-    }
+  dbPool.getConnection((err, connection) => {
+    if(err) throw err
+
+    const query = 'UPDATE lists SET Title = ? WHERE ListID = ?'
+
+    connection.query(query, [req.body.data.title, req.params.id], (err, result) => {
+      if (err) {
+        res.status(404).send({notFound:"List not found"})
+        connection.release()
+      } else {
+        res.status(200).send({message: "List Renamed Successfully"})
+        connection.release()
+      }
+    })
   })
 }
 
@@ -226,14 +243,20 @@ const renameList = (req, res, next) => {
 // @desc    Rename Item
 // @route   PATCH /api/v1/item/:id
 const renameItem = (req, res, next) => {
-  const query = `UPDATE item SET Content = "${req.body.data.content}" WHERE ItemID = "${req.params.id}"`
 
-  db.query(query, (err, result) => {
+  dbPool.getConnection((err, connection) => {
+    if(err) throw err
+    const query = 'UPDATE item SET Content = ? WHERE ItemID = ?'
+
+    connection.query(query, [req.body.data.content, req.params.id], (err, result) => {
     if (err) {
       res.status(404).send({notFound:"Item not found"})
+      connection.release()
     } else {
       res.status(200).send({message: "Item Renamed Successfully"})
+      connection.release()
     }
+  })
   })
 }
 
