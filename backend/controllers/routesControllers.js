@@ -5,6 +5,8 @@ import { dbPool } from './dbconnection.js'
 const getLists = (req, res, next) => {
 
   dbPool.getConnection((err, connection) => {
+    if (err) throw err
+
     const query = 'SELECT * FROM lists'
 
     connection.query(query, (err, result) => {
@@ -24,6 +26,8 @@ const getLists = (req, res, next) => {
 const getListItems = (req, res, next) => {
   
   dbPool.getConnection((err, connection) => {
+    if (err) throw err
+
     const query = 'select * from item INNER JOIN list_items ON list_items.ListID = ? && item.ItemID = list_items.ItemID'
 
     connection.query(query, [req.params.id], (err, result) => {
@@ -43,7 +47,10 @@ const getListItems = (req, res, next) => {
 const addList = (req, res, next) => {
 
   dbPool.getConnection((err, connection) => {
+    if (err) throw err
+
     const query = 'INSERT INTO lists (Title, Location) VALUES (?, 100);'
+
     connection.query(query, [req.body.content], (err, result) => {
       if (err) {
         res.status(404).send({notFound:"No Lists found. Please Create a List"})
@@ -60,29 +67,41 @@ const addList = (req, res, next) => {
 // @route   POST /api/v1/listitems/:id
 const addItem = (req, res, next) => {
   
-  const query = `INSERT INTO item (Content, Location) VALUES ("${req.body.content}", 100);`
+  dbPool.getConnection((err, connection) => {
+    if (err) throw err
+
+    const query = 'INSERT INTO item (Content, Location) VALUES (?, 100);'
   
-  db.query(query, (err, result) => {
-    if (err) {
-      res.status(404).send({notFound:"Cannot create item"})
-    } else {
-      assignItemList(req.params.id, result)
-    }
+    connection.query(query, [req.body.content], (err, result) => {
+      if (err) {
+        res.status(404).send({notFound:"Cannot create item"})
+        connection.release()
+      } else {
+        assignItemList(req.params.id, result)
+        connection.release()
+      }
+    })
   })
 
   const assignItemList = (listID, item) => {
   
-    const query = `INSERT INTO list_items (ListID, ItemID) VALUES (${listID}, ${item.insertId});`
+    dbPool.getConnection((err, connection) => {
+      if (err) throw err
+
+      const query = 'INSERT INTO list_items (ListID, ItemID) VALUES (?, ?);'
     
-      db.query(query, (err, result) => {
+      connection.query(query, [listID, item.insertId], (err, result) => {
         if (err) {
           res.status(404).send({notFound:"No Lists found to add item. Please Create a List first"})
+          connection.release()
         } else {
           res.status(200).send({message: "Item Added to List"})
+          connection.release()
         }
       })
-    }
+    })
   }
+}
 
 // @desc    Delete item and remove item from list
 // @route   DELETE /api/v1/listitems/:id
