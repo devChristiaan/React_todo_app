@@ -1,18 +1,24 @@
-import { dbpool } from './dbconnection.js'
+import { dbPool } from './dbconnection.js'
 
 // @desc    Create a new Note
 // @route   POST /api/v1/notepad
 const createNote = (req, res) => {
-  
-  const query = `INSERT INTO notes (Title, Content) VALUES ('${req.body.Title}', '${req.body.Content}')`
-  
-  db.query(query, (err, result) => {
-    if (err) {
-      console.log(err)
-      res.status(500).send({error: 'Error creating note'})
-    } else {
-      res.status(200).send({success: 'Notepad created successfully'})
-    }
+
+  dbPool.getConnection((err, connection) => {
+    if (err) throw err
+
+    const query = `INSERT INTO notes (Title, Content) VALUES (?, ?)`
+
+    connection.query(query, [req.body.Title, req.body.Content], (err, result) => {
+      if (err) {
+        console.log(err)
+        res.status(500).send({error: 'Error creating note'})
+        connection.release();
+      } else {
+        res.status(200).send({success: 'Notepad created successfully'})
+        connection.release();
+      }
+    })
   })
 }
 

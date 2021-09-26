@@ -1,4 +1,4 @@
-import { dbpool } from './dbconnection.js'
+import { dbPool } from './dbconnection.js'
 
 // @desc    Get all lists
 // @route   GET /api/v1/lists

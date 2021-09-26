@@ -4,7 +4,7 @@ import dotenv from "dotenv"
 dotenv.config({path: './config.env'});
 
 //DB connections
-const dbpool = mysql.createPool({
+const dbPool = mysql.createPool({
   connectionLimit: 100,
   host: process.env.HOST,
   user: process.env.USER,
@@ -12,11 +12,4 @@ const dbpool = mysql.createPool({
   database: process.env.DATABASE
 })
 
-// db.connect((err) => {
-//   if (err) {
-//     console.log('error connecting: ' + err);
-//   } else {
-//     console.log("MySQL database is connected")
-//   }})
-
-export { dbpool }
+export { dbPool }
