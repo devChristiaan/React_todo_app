@@ -161,8 +161,8 @@ const listItems = (id) => {
           connection.release()
         } else {
           let data = JSON.stringify(result)
-          connection.release()
           setItems(JSON.parse(data))
+          connection.release()
         }
       })
     })
@@ -185,8 +185,8 @@ const deleteListItems = (list) => {
           res.status(404).send({notFound:"List list items not found"})
           connection.release()
         } else {
-          connection.release()
           resolve(result)
+          connection.release()
         }
       })
     })
@@ -207,8 +207,8 @@ const deleteList = () => {
           connection.release()
         } else {
           res.status(200).send({message: "List Deleted Successfully"})
-          connection.release()
           resolve()
+          connection.release()
         }
       })
     })
@@ -229,9 +229,8 @@ const deleteJoin = () => {
           res.status(404).send({notFound:"List not found"})
           connection.release()
         } else {
-          res.status(200).send({message: "List Deleted Successfully"})
-          connection.release()
           resolve()
+          connection.release()
         }
       })
     })
