@@ -28,7 +28,7 @@ const getListItems = (req, res, next) => {
   dbPool.getConnection((err, connection) => {
     if (err) throw err
 
-    const query = 'select * from item INNER JOIN list_items ON list_items.ListID = ? && item.ItemID = list_items.ItemID'
+    const query = 'select * from item INNER JOIN list_items ON list_items.ListID = ? && item.ItemID = list_items.ItemID;'
 
     connection.query(query, [req.params.id], (err, result) => {
       if (err) {
@@ -77,8 +77,8 @@ const addItem = (req, res, next) => {
         res.status(404).send({notFound:"Cannot create item"})
         connection.release()
       } else {
-        assignItemList(req.params.id, result)
         connection.release()
+        assignItemList(req.params.id, result)
       }
     })
   })
@@ -108,15 +108,15 @@ const addItem = (req, res, next) => {
 const deleteItem = (req, res, next) => {
 
   dbPool.getConnection((err, connection) => {
-    const query = 'DELETE FROM list_items WHERE ItemID = ? && ListID = ?'
+    const query = 'DELETE FROM list_items WHERE ItemID = ? && ListID = ?;'
 
     connection.query(query, [req.params.id, req.body.ListID], (err, result) => {
       if (err) {
         res.status(404).send({notFound:"No list or item found"})
         connection.release()
       } else {
-        removeItem()
         connection.release()
+        removeItem()
       }
     })
   })
@@ -125,7 +125,7 @@ const deleteItem = (req, res, next) => {
     dbPool.getConnection((err, connection) => {
       if(err) throw err
 
-      const query2 = 'DELETE FROM item WHERE ItemID = ?'
+      const query2 = 'DELETE FROM item WHERE ItemID = ?;'
 
       connection.query(query2, [req.params.id], (err, result) => {
         if (err) {
@@ -149,7 +149,7 @@ const listItems = (id) => {
     dbPool.getConnection((err, connection) => {
       if(err) throw err
 
-      const query = 'select * from item INNER JOIN list_items ON list_items.ListID = ? && item.ItemID = list_items.ItemID'
+      const query = 'select * from item INNER JOIN list_items ON list_items.ListID = ? && item.ItemID = list_items.ItemID;'
 
       const setItems = (results) => {
         resolve(results.map(item => item.ItemID))
@@ -177,7 +177,7 @@ const deleteListItems = (list) => {
     dbPool.getConnection((err, connection) => {
       if(err) throw err
 
-      const query = 'DELETE FROM item WHERE (ItemID) IN (?)'
+      const query = 'DELETE FROM item WHERE (ItemID) IN (?);'
 
       connection.query(query, [list], (err, result) => {
         if (err) {
@@ -222,7 +222,7 @@ const deleteJoin = () => {
     dbPool.getConnection((err, connection) => {
       if(err) throw err
 
-      const query = 'DELETE FROM list_items WHERE ListID = ?'
+      const query = 'DELETE FROM list_items WHERE ListID = ?;'
 
       connection.query(query, [req.params.id], (err, result) => {
         if (err) {
@@ -249,7 +249,7 @@ const renameList = (req, res, next) => {
   dbPool.getConnection((err, connection) => {
     if(err) throw err
 
-    const query = 'UPDATE lists SET Title = ? WHERE ListID = ?'
+    const query = 'UPDATE lists SET Title = ? WHERE ListID = ?;'
 
     connection.query(query, [req.body.data.title, req.params.id], (err, result) => {
       if (err) {
@@ -270,7 +270,7 @@ const renameItem = (req, res, next) => {
 
   dbPool.getConnection((err, connection) => {
     if(err) throw err
-    const query = 'UPDATE item SET Content = ? WHERE ItemID = ?'
+    const query = 'UPDATE item SET Content = ? WHERE ItemID = ?;'
 
     connection.query(query, [req.body.data.content, req.params.id], (err, result) => {
     if (err) {
